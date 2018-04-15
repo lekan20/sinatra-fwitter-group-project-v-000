@@ -35,7 +35,7 @@ class TweetsController < ApplicationController
     end
   end
 
-  get '/tweets/:id/edit' do
+  get '/tweets/:id/edit' do #UPDATE: edit tweets contents
     @tweet = Tweet.find_by_id(params[:id])
     if session[:user_id] && @tweet.user_id == session[:user_id]
       erb :'/tweets/edit_tweet'
@@ -44,8 +44,8 @@ class TweetsController < ApplicationController
     end
   end
 
-  patch '/tweets/:id/edit' do
-    if !params[:content].empty
+  patch '/tweets/:id/edit' do #UPDATE: update tweet instance
+    if !params[:content].empty?
       @tweet = Tweet.find_by_id(params[:id])
       @tweet.content = (params[:content])
       @tweet.save
@@ -53,6 +53,10 @@ class TweetsController < ApplicationController
     else
       redirect "/tweets/#{@tweet.id}/edit"
     end
+  end
+
+  delete '/tweets/:id/delete' do #DELETE: delete and insatnce of tweet
+
   end
 
 end

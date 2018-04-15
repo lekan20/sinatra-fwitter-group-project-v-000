@@ -18,13 +18,32 @@ class UsersController < ApplicationController
     end
   end
 
-  get '/login' do
+  get '/login' do #if user isn't logged in bring them to the login page
     if !logged_in?
       erb :'/users/login'
     else
-      redirct '/tweets'
+      redirect '/tweets'
     end
   end
 
+  post '/login' do
+    #find the user, make sure the user and their password matches, save the user id ot the session
+    #if not, bring them to the login page
+    @user = User.find_by(:username => params[:username])
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      redirect '/tweets'
+    else
+      redirect '/login'
+    end
+  end
+
+  get '/logout' do
+    if logged_in?
+      session.clear
+    else
+      redirect '/'
+    end
+  end
 
 end
